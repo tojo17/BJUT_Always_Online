@@ -1,3 +1,7 @@
+.idea/
+accounts.txt
+backupac.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
