@@ -57,7 +57,7 @@ def if_overused():
 
     html_par.feed(html_res.text)
     # print_log(int(html_par.used_data))
-    if html_par.used_data == "-1"
+    if html_par.used_data == "-1":
         # not logged in
         return -1
     elif int(html_par.used_data) / (8 * 1024 * 1024) < 0.9:
@@ -165,7 +165,7 @@ def login():
             elif traffic_status == -1:
                 # not logged in
                 print_log("Not logged in, try next.")
-            elif traffic_status == 1
+            elif traffic_status == 1:
                 # overused
                 print_log("Traffic used over 90%, try next.")
                 logout()
@@ -184,7 +184,7 @@ def reset_index():
 def print_log(content):
     print(content)
     f_log = open("log.txt", "a")
-    f_log.write(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + str(content) + '\n')
+    f_log.write(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())) + str(content) + '\n')
     f_log.close()
     return
 
@@ -199,9 +199,9 @@ if __name__ == "__main__":
         status = if_overused()
         if status == 0 or is_back_account == True:
             print_log("Fine")
-        elif status == -1
+        elif status == -1:
             print_log("Offline. Log in.")
-        elif status == 1
+        elif status == 1:
             print_log("Traffic used over 90%, changing account...")
             logout()
             renew_index()

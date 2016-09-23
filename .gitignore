@@ -154,3 +154,4 @@ sync_hook.script
 
 **/.Archive
 *.data
+log.txt
