@@ -199,13 +199,14 @@ if __name__ == "__main__":
         status = if_overused()
         if status == 0 or is_back_account == True:
             print_log("Fine")
-        elif status == -1:
-            print_log("Offline. Log in.")
-        elif status == 1:
-            print_log("Traffic used over 90%, changing account...")
-            logout()
-            renew_index()
-        is_back_account = login()
+        else:
+            if status == -1:
+                print_log("Offline. Log in.")
+            elif status == 1:
+                print_log("Traffic used over 90%, changing account...")
+                logout()
+                renew_index()
+            is_back_account = login()
 
         # reset index every month
         t_time = time.localtime(time.time())
