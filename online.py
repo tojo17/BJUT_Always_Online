@@ -2,10 +2,25 @@
 import requests
 import linecache
 import time
+import sys
 from html.parser import HTMLParser
 
 # this global variable is used to avoid SSL cert verify fail when fiddler is used
 fiddler_ssl = False
+ex_log = False
+
+
+def heart_beat():
+    try:
+        r = requests.get("http://www.msftncsi.com/ncsi.txt", timeout=1)
+        t = r.text
+        print_log("Heart beat sent.")
+    except:
+        t = "offline"
+    if t == "Microsoft NCSI":
+        return True
+    else:
+        return False
 
 
 def if_overused():
@@ -189,10 +204,12 @@ def reset_index():
 
 
 def print_log(content):
-    print(content)
-    f_log = open("log.txt", "a")
-    f_log.write(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())) + str(content) + '\n')
-    f_log.close()
+    print(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())) + content)
+    sys.stdout.flush()
+    if ex_log:
+        f_log = open("log.txt", "a")
+        f_log.write(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())) + str(content) + '\n')
+        f_log.close()
     return
 
 
@@ -219,5 +236,6 @@ if __name__ == "__main__":
         t_time = time.localtime(time.time())
         if t_time.tm_mday == 1 and t_time.tm_hour == 0 and t_time.tm_min == 10:
             reset_index()
-
-        time.sleep(60)
+        if t_time.tm_min % 10 == 0:
+            heart_beat()
+        time.sleep(59)
