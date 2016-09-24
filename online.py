@@ -8,40 +8,24 @@ from html.parser import HTMLParser
 fiddler_ssl = False
 
 
-def if_online():
-    r = requests.get("http://www.msftncsi.com/ncsi.txt")
-    if r.text == "Microsoft NCSI":
-        return True
-    else:
-        return False
-
-
 def if_overused():
     class HtmlPar(HTMLParser):
         ct_script = 0
         flg_script = False
-        flg_title = False
         used_data = ""
 
         def handle_starttag(self, tag, attrs):
-            if tag == 'title':
-                HtmlPar.flg_title = True
-            elif len(attrs) != 0 and len(attrs[0]) != 0:
+            if len(attrs) != 0 and len(attrs[0]) != 0:
                 if tag == "script" and attrs[0][1] == "JavaScript":
                     HtmlPar.ct_script = HtmlPar.ct_script + 1
                     HtmlPar.flg_script = True
 
         def handle_endtag(self, tag):
-            if tag == 'title':
-                HtmlPar.flg_title = False
-            elif tag == "script":
+            if tag == "script":
                 HtmlPar.flg_script = False
 
         def handle_data(self, data):
-            if HtmlPar.flg_title and data[0:11] == "北京工业大学上网登录窗":
-                # not logged in
-                HtmlPar.used_data = "-1"
-            elif HtmlPar.flg_script and HtmlPar.ct_script == 1:
+            if HtmlPar.flg_script and HtmlPar.ct_script == 1:
                 # get used traffic
                 str_idx_s = data.index("';flow='") + 8
                 str_idx_e = data.index("';fsele=", str_idx_s)
@@ -50,22 +34,25 @@ def if_overused():
     html_url = "https://lgn.bjut.edu.cn/"
     try:
         html_res = requests.get(html_url, verify=not fiddler_ssl)
+        html_res.encoding = "GB2312"
     except:
         print_log("Failed to get login page. Exiting.")
         exit()
     html_par = HtmlPar()
-
-    html_par.feed(html_res.text)
-    # print_log(int(html_par.used_data))
-    if html_par.used_data == "-1":
+    # print(html_res.text)
+    if not is_online(html_res):
         # not logged in
         return -1
-    elif int(html_par.used_data) / (8 * 1024 * 1024) < 0.9:
-        # not overused
-        return 0
     else:
-        # used over 90 percent
-        return 1
+        html_par.flg_is_online = True
+        html_par.feed(html_res.text)
+        print_log(html_par.used_data + '\t' + str(int(int(html_par.used_data) / (8 * 1024 * 1024) * 100)) + '%')
+        if int(html_par.used_data) / (8 * 1024 * 1024) < 0.9:
+            # not overused
+            return 0
+        else:
+            # used over 90 percent
+            return 1
 
 
 def get_available_account():
@@ -90,6 +77,29 @@ def renew_index():
     return 0
 
 
+def is_online(html_res):
+    class HtmlPar(HTMLParser):
+        flg_title = False
+        flg_success = True
+
+        def handle_starttag(self, tag, attrs):
+            if tag == 'title':
+                HtmlPar.flg_title = True
+
+        def handle_endtag(self, tag):
+            if tag == 'title':
+                HtmlPar.flg_title = False
+
+        def handle_data(self, data):
+            if HtmlPar.flg_title and data[0:11] == "北京工业大学上网登录窗":
+                # not logged in
+                HtmlPar.flg_success = False
+
+    html_par = HtmlPar()
+    html_par.feed(html_res.text)
+    return html_par.flg_success
+
+
 def is_success(html_res):
     class HtmlPar(HTMLParser):
         flg_title = False
@@ -109,10 +119,7 @@ def is_success(html_res):
 
     html_par = HtmlPar()
     html_par.feed(html_res.text)
-    if html_par.flg_success:
-        return True
-    else:
-        return False
+    return html_par.flg_success
 
 
 def logout():
