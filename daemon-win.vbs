@@ -1,3 +1,5 @@
 Set ws = CreateObject("Wscript.Shell")
 path = createobject("Scripting.FileSystemObject").GetFile(Wscript.ScriptFullName).ParentFolder.Path
-ws.run "daemon.cmd " & chr(34) & path & chr(34),vbhide
+ws.CurrentDirectory = path
+ws.run "cmd.exe /c python online.py >> log.txt", vbhide
+ws.run "cmd.exe /c ssserver -c d:\shadowsocks.json", vbhide
