@@ -232,10 +232,16 @@ if __name__ == "__main__":
                 renew_index()
             is_back_account = login()
 
-        # reset index every month
+
         t_time = time.localtime(time.time())
-        if t_time.tm_mday == 1 and t_time.tm_hour == 0 and t_time.tm_min == 10:
-            reset_index()
+        # reset log every morning
+        if t_time.tm_hour == 0 and t_time.tm_min == 10:
+            f_log = open("log.txt", "w")
+            f_log.close()
+            # reset index every month
+            if t_time.tm_mday == 1:
+                reset_index()
         if t_time.tm_min % 10 == 0:
             heart_beat()
+
         time.sleep(59)
