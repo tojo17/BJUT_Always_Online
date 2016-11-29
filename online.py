@@ -180,7 +180,7 @@ def login():
             # login successfully
             print_log("Logged in. Checking traffic.")
             traffic_status = if_overused()
-            if traffic_status == 0 or back_account == True:
+            if traffic_status == 0 or back_account is True:
                 # login success
                 print_log("Traffic enough.")
                 return back_account
@@ -221,7 +221,7 @@ if __name__ == "__main__":
     while 1:
         print_log("Checking traffic...")
         status = if_overused()
-        if status == 0 or is_back_account == True:
+        if status == 0 or is_back_account is True:
             print_log("Fine")
         else:
             if status == -1:
@@ -231,7 +231,6 @@ if __name__ == "__main__":
                 logout()
                 renew_index()
             is_back_account = login()
-
 
         t_time = time.localtime(time.time())
         # reset log every morning
