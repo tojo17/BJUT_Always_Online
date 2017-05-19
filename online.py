@@ -8,6 +8,7 @@ from html.parser import HTMLParser
 # this global variable is used to avoid SSL cert verify fail when fiddler is used
 fiddler_ssl = False
 ex_log = False
+retry_count = 0
 
 
 def heart_beat():
@@ -194,7 +195,13 @@ def login():
             renew_index()  # index the next account
         else:
             # login not success
-            print_log("Login failure, retry.")
+            global retry_count
+            if retry_count>3:
+            	renew_index()
+            	print_log("Login failure too many times, try next.")
+            else:
+            	retry_count += 1
+            	print_log("Login failure, retry.")
 
 
 def reset_index():
@@ -235,9 +242,12 @@ if __name__ == "__main__":
 
         t_time = time.localtime(time.time())
         # reset log every morning
-        if t_time.tm_hour == 0 and t_time.tm_min == 10:
+        if t_time.tm_hour == 0 and t_time.tm_min <= 5:
+        	# makesure not miss
             f_log = open("log.txt", "w")
+            f_log.truncate()
             f_log.close()
+
             # reset index every month
             if t_time.tm_mday == 1:
                 reset_index()
