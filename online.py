@@ -198,6 +198,7 @@ def login():
             global retry_count
             if retry_count>3:
             	renew_index()
+            	retry_count = 0
             	print_log("Login failure too many times, try next.")
             else:
             	retry_count += 1
