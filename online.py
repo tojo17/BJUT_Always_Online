@@ -9,7 +9,8 @@ from html.parser import HTMLParser
 fiddler_ssl = False
 ex_log = False
 retry_count = 0
-
+# base_url = "lgn.bjut.edu.cn" # sometimes DNS goes down, we need ip address
+base_url = "172.30.201.10"
 
 def heart_beat():
     try:
@@ -47,7 +48,7 @@ def if_overused():
                 str_idx_e = data.index("';fsele=", str_idx_s)
                 HtmlPar.used_data = data[str_idx_s:str_idx_e].rstrip()
 
-    html_url = "https://lgn.bjut.edu.cn/"
+    html_url = "http://" + base_url + "/"
     try:
         html_res = requests.get(html_url, verify=not fiddler_ssl)
         html_res.encoding = "GB2312"
@@ -139,7 +140,7 @@ def is_success(html_res):
 
 
 def logout():
-    html_url = "https://lgn.bjut.edu.cn/F.html"
+    html_url = "http://" + base_url + "/F.html"
     try:
         requests.get(html_url, verify=not fiddler_ssl)
     except:
@@ -167,7 +168,7 @@ def login():
             'v46s': '1',
             '0MKKey': ''
         }
-        html_url = "https://lgn.bjut.edu.cn/"
+        html_url = "http://" + base_url + "/"
         html_res = None
         try:
             html_res = requests.post(html_url, data=html_values, verify=not fiddler_ssl)
