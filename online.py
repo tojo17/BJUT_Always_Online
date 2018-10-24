@@ -15,7 +15,7 @@ retry_count = 0
 flow_rate = 0.5
 
 # intervals for next traffic check
-lifecycle = 4
+lifecycle = 59
 
 # WLAN detection
 wlan_url = "10.21.250.3"
@@ -34,7 +34,11 @@ base_url = "172.30.201.10"
 
 def heart_beat():
     try:
-        r = requests.get("http://www.msftncsi.com/ncsi.txt", timeout=1)
+        headers = {
+        'Connection': 'close',
+        }
+        r = requests.get("http://www.msftncsi.com/ncsi.txt", timeout = 1, headers = headers)
+        requests.adapters.DEFAULT_RETRIES = 5
         t = r.text
         print_log("Heart beat sent.")
     except:
@@ -84,11 +88,11 @@ def if_overused():
         html_par.flg_is_online = True
         html_par.feed(html_res.text)
         print_log(str(("%.2f" % (float(html_par.used_data) / 1024))) + " MiB" '\t' + str(int(int(html_par.used_data) / (8 * 1024 * 1024) * 100)) + '%')
-        if int(html_par.used_data) / (8 * 1024 * 1024) < 0.9:
+        if int(html_par.used_data) / (8 * 1024 * 1024) < flow_rate:
             # not overused
             return 0
         else:
-            # used over 90 percent
+            # used over limit
             return 1
 
 
@@ -267,11 +271,8 @@ if __name__ == "__main__":
 
     # loop starts
     while 1:
-        if heart_beat():
-            print_log("Checking traffic...")
-            status = if_overused()
-        else:
-            status = -1
+        print_log("Checking traffic...")
+        status = if_overused()
         if status == 0 or is_back_account is True:
             print_log("Fine")
         else:
@@ -294,7 +295,7 @@ if __name__ == "__main__":
             # reset index every month
             if t_time.tm_mday == 1:
                 reset_index()
-        if lifecycle > 20 and t_time.tm_min % 10 == 0:
+        if t_time.tm_min % 10 == 0:
             heart_beat()
 
         time.sleep(lifecycle)
