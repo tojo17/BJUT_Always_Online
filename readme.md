@@ -1,12 +1,14 @@
 # BJUT_Always_Online
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)![build: success](https://img.shields.io/badge/Build-success-green.svg)
+
+
 README [English](#English) | [中文](#中文)
 
 ## English
 ### Introduction
 
 BJUT_Always_Online is a test project based on Python, it is used to auto-login the campus network (**both for wired network and wireless network**) with a bunch of accounts in Beijing University of Technology.
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 ### Features
@@ -27,7 +29,6 @@ BJUT_Always_Online is a test project based on Python, it is used to auto-login t
 ### 介绍
 
 BJUT_Always_Online 是一个基于 Python 语言开发的项目，它是一个测试项目，用于实现位于北京工业大学校园网内的主机自动登录城市热点的 **无线和有线网络** 认证系统，实现服务器持续在线。
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### 特性
 
