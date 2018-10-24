@@ -12,41 +12,41 @@ ex_log = False
 retry_count = 0
 
 # flow upper limit rate
-flow_rate = 0.5
+flow_rate = 0.8
 
 # intervals for next traffic check
-lifecycle = 59
+lifecycle = 5
 
 # WLAN detection
 wlan_url = "10.21.250.3"
-wlan_resp = urlopen("http://" + wlan_url + "/")
-if wlan_resp.getcode() == 200:
-    wlan_status = True
-    print("WLAN connection detected.")
-else:
-    wlan_status = False
-    print("Wired connection detected.")
 
 # base_url = "lgn.bjut.edu.cn" 
 # sometimes DNS goes down, we need ip address
 base_url = "172.30.201.10"
 
+wlan_status = -1
+
+def wlan_detect():
+    wlan_resp = urlopen("http://" + wlan_url + "/")
+    if wlan_resp.getcode() == 200:
+        wlan_status = True
+        print("WLAN connection detected.")
+    else:
+        wlan_status = False
+        print("Wired connection detected.")
 
 def heart_beat():
     try:
         headers = {
         'Connection': 'close',
         }
-        r = requests.get("http://www.msftncsi.com/ncsi.txt", timeout = 1, headers = headers)
+        r = requests.get("http://www.msftncsi.com/ncsi.txt", timeout=1, headers=headers)
         requests.adapters.DEFAULT_RETRIES = 5
         t = r.text
         print_log("Heart beat sent.")
     except:
         t = "offline"
-    if t == "Microsoft NCSI":
-        return True
-    else:
-        return False
+    return t == "Microsoft NCSI" 
 
 
 def if_overused():
@@ -87,12 +87,15 @@ def if_overused():
     else:
         html_par.flg_is_online = True
         html_par.feed(html_res.text)
-        print_log(str(("%.2f" % (float(html_par.used_data) / 1024))) + " MiB" '\t' + str(int(int(html_par.used_data) / (8 * 1024 * 1024) * 100)) + '%')
+        try:
+            print_log(str(("%.2f" % (float(html_par.used_data) / 1024))) + " MiB" '\t' + str(int(int(html_par.used_data) / (8 * 1024 * 1024) * 100)) + '%')
+        except:
+            return -1;
         if int(html_par.used_data) / (8 * 1024 * 1024) < flow_rate:
             # not overused
             return 0
         else:
-            # used over limit
+            # used over limit   
             return 1
 
 
@@ -147,10 +150,13 @@ def is_success(html_res):
         flg_success = False
 
         if wlan_status:
-            is_success_resp = requests.get("http://www.msftncsi.com/ncsi.txt", timeout=1)
-            if is_success_resp.text == "Microsoft NCSI":
-                flg_success = True
-                flg_title = True
+            try:
+                tmp_respo = urlopen("http://www.baidu.com/")
+                if tmp_respo.getcode() == 200:
+                    flg_success = True
+                    flg_title = True
+            except:
+                pass
         else:
             def handle_starttag(self, tag, attrs):
                 if tag == 'title':
@@ -271,6 +277,7 @@ if __name__ == "__main__":
 
     # loop starts
     while 1:
+        wlan_detect()
         print_log("Checking traffic...")
         status = if_overused()
         if status == 0 or is_back_account is True:
