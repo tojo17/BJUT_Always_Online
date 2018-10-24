@@ -160,7 +160,7 @@ def is_success(html_res):
                 HtmlPar.flg_title = False
 
         def handle_data(self, data):
-            if HtmlPar.flg_title and (data == "登录成功窗" or "注销" in data):
+            if HtmlPar.flg_title and (data == "登录成功窗") or ("注销" in data):
                 HtmlPar.flg_success = True
 
     html_par = HtmlPar()
