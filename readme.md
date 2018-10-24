@@ -1,18 +1,39 @@
-# 北工大校园网主机保持公网在线
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
-由于各种各样的原因，总有的时候希望自己的主机在校园网里长期在线保持公网连接，以提供一些服务。但一方面校园网的 web 认证对 *nix 命令行很不友好。虽然在之前的文章里我提到过使用 curl 的方式从命令行登录。但如果闲置半小时左右没有数据包发出，连接会被自动踢掉。  
-另一方面还有可能发生流量用光了扣钱，钱扣完了被踢掉等情况，导致我们的内网主机不能稳定在线。也无法通过 ngrok 等内网穿透技术实现公网访问。  
-  
-因此我搞了一个小 da 程 xin 序 wen，它可以每分钟检测一次登陆情况，如果未登陆外网则会从预定的账号列表中挑选可用账号自动登录。如果已经登录则会检测已使用流量是否超限，并自动更换下一个可用的账号。  
-如果不幸列表中的账号流量均超限了，还可以设置一个保底账号，无视流量限制而保持在线，虽然代价是可能扣很多钱。  
-每个月月初流量重置时，会自动重置账号列表。  
-  
-还附带了 linux 和 windows 下的自启动脚本，直接放进 rc.local 或者 Windows StartUp 里就可以了。  
-  
-内网挂服务的同学可以放心地挂机了。    
-  
-很惭愧，就做了一点微小的工作，谢谢大家。  
+# BJUT_Always_Online
+## English
+### Introduction
 
-### 使用方法
+BJUT_Always_Online is a test project based on Python, it is used to auto-login the campus network (both for wired network and wireless network) with a bunch of accounts in Beijing University of Technology.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-建立 accounts.txt 和 backupac.txt，参照 sample 中的格式填写网关账号密码。
+### Features
+
++ Time heartbeat packet, avoid kicked by the gateway.
++ Cross-platform, based on Python.
++ Detect the rest of traffic flows.
++ Set the upper limit of traffic flows, and change account automatically.
++ Auto reset the index of account list at the start of each month.
++ Set backup account to keep online and ignore the limitation of traffic flows (this may produce network traffic cost).
+
+### Usage
+
+1. Create `accounts.txt` and `backupac.txt` as the sample formats.
+2. Execute `python online.py`.
+
+## 中文
+### 介绍
+
+BJUT_Always_Online 是一个基于 Python 语言开发的项目，它是一个测试项目，用于实现位于北京工业大学校园网内的主机自动登录城市热点的无线和有线网络认证系统，实现服务器持续在线。
+
+### 特性
+
++ 定时发送心跳包，避免被网关踢下线。
++ 跨平台使用，支持 Windows、Linux、Mac OS 等一切安装了 Python 的操作系统。
++ 账号剩余流量监测。
++ 限制账号使用流量上限，并自动更换账号。
++ 月初自动重置账号列表。
++ 设置应急账号，无视流量限制而保持在线（可能会产生费用）。
+
+### 使用
+
+1. 建立 `accounts.txt` 和 `backupac.txt`，参照 sample 中的格式填写网关账号密码。
+2. 执行 `python online.py`。
