@@ -10,7 +10,6 @@ README [English](#English) | [中文](#中文)
 
 BJUT_Always_Online is a test project based on Python, it is used to auto-login the campus network (**both for wired network and wireless network**) with a bunch of accounts in Beijing University of Technology.
 
-
 ### Features
 
 + Time heartbeat packet, avoid kicked by the gateway.

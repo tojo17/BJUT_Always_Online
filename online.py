@@ -15,9 +15,11 @@ retry_count = 0
 flow_rate = 0.8
 
 # intervals for next traffic check
-lifecycle = 5
+lifecycle = 59
 
 # WLAN detection
+# base_url = "wlgn.bjut.edu.cn" 
+# sometimes DNS goes down, we need ip address
 wlan_url = "10.21.250.3"
 
 # base_url = "lgn.bjut.edu.cn" 
