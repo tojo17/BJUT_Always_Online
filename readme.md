@@ -1,6 +1,6 @@
 # BJUT_Always_Online
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)![build: success](https://img.shields.io/badge/Build-success-green.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 README [English](#English) | [中文](#中文)

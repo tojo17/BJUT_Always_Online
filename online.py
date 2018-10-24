@@ -15,7 +15,7 @@ retry_count = 0
 flow_rate = 0.8
 
 # intervals for next traffic check
-lifecycle = 59
+lifecycle = 5
 
 # WLAN detection
 # base_url = "wlgn.bjut.edu.cn" 
@@ -151,26 +151,17 @@ def is_success(html_res):
         flg_title = False
         flg_success = False
 
-        if wlan_status:
-            try:
-                tmp_respo = urlopen("http://www.baidu.com/")
-                if tmp_respo.getcode() == 200:
-                    flg_success = True
-                    flg_title = True
-            except:
-                pass
-        else:
-            def handle_starttag(self, tag, attrs):
-                if tag == 'title':
-                    HtmlPar.flg_title = True
+        def handle_starttag(self, tag, attrs):
+            if tag == 'title':
+                HtmlPar.flg_title = True
 
-            def handle_endtag(self, tag):
-                if tag == 'title':
-                    HtmlPar.flg_title = False
+        def handle_endtag(self, tag):
+            if tag == 'title':
+                HtmlPar.flg_title = False
 
-            def handle_data(self, data):
-                if HtmlPar.flg_title and data == "登录成功窗":
-                    HtmlPar.flg_success = True
+        def handle_data(self, data):
+            if HtmlPar.flg_title and data == "登录成功窗" or data == "注销":
+                HtmlPar.flg_success = True
 
     html_par = HtmlPar()
     html_par.feed(html_res.text)
