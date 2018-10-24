@@ -15,7 +15,7 @@ retry_count = 0
 flow_rate = 0.8
 
 # intervals for next traffic check
-lifecycle = 5
+lifecycle = 59
 
 # WLAN detection
 # base_url = "wlgn.bjut.edu.cn" 
@@ -160,7 +160,7 @@ def is_success(html_res):
                 HtmlPar.flg_title = False
 
         def handle_data(self, data):
-            if HtmlPar.flg_title and data == "登录成功窗" or data == "注销":
+            if HtmlPar.flg_title and (data == "登录成功窗" or "注销" in data):
                 HtmlPar.flg_success = True
 
     html_par = HtmlPar()
