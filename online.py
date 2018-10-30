@@ -29,14 +29,16 @@ base_url = "172.30.201.10"
 wlan_status = -1
 
 def wlan_detect():
-    wlan_resp = urlopen("http://" + wlan_url + "/")
-    if wlan_resp.getcode() == 200:
-        wlan_status = True
-        print("WLAN connection detected.")
-    else:
-        wlan_status = False
-        print("Wired connection detected.")
-
+    try:
+        wlan_resp = urlopen("http://" + wlan_url + "/")
+        if wlan_resp.getcode() == 200:
+            wlan_status = True
+            print("WLAN connection detected.")
+        else:
+            wlan_status = False
+            print("Wired connection detected.")
+    except:
+        pass
 def heart_beat():
     try:
         headers = {
