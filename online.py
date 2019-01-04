@@ -53,8 +53,9 @@ def if_overused():
         html_res = requests.get(html_url, verify=not fiddler_ssl)
         html_res.encoding = "GB2312"
     except:
-        print_log("Failed to get login page. Exiting.")
-        exit()
+        print_log("Failed to get login page. Pass.")
+        return 0
+        # exit()
     html_par = HtmlPar()
     # print(html_res.text)
     if not is_online(html_res):
