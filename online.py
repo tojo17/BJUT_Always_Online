@@ -35,6 +35,9 @@ ex_logfile = "log.txt"
 # Avoid SSL cert verify error for fiddler debugging
 fiddler_ssl = False
 
+# Avoid Runtime Error
+avoid_error = True
+
 ##############################
 #####      Variables     ##### 
 ##############################
@@ -95,8 +98,9 @@ def if_overused():
         html_res = requests.get(html_url, verify=not fiddler_ssl)
         html_res.encoding = "GB2312"
     except:
-        print_log("Failed to get login page. Exiting.")
-        exit()
+        print_log("Failed to get login page.")
+        if !avoid_error:
+            exit()
     html_par = HtmlPar()
     # print(html_res.text)
     if not is_online(html_res):
@@ -232,8 +236,9 @@ def login():
             html_res = requests.post(html_url, data=html_values, verify=not fiddler_ssl)
             html_res.encoding = "GB2312"
         except:
-            print_log("Could not open login page, exiting...")
-            exit()
+            print_log("Could not open login page.")
+            if !avoid_error:
+                exit()
 
         # check login result
         if is_success(html_res):
