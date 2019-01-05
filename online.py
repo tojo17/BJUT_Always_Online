@@ -99,7 +99,7 @@ def if_overused():
         html_res.encoding = "GB2312"
     except:
         print_log("Failed to get login page.")
-        if !avoid_error:
+        if avoid_error == False:
             exit()
     html_par = HtmlPar()
     # print(html_res.text)
@@ -237,7 +237,7 @@ def login():
             html_res.encoding = "GB2312"
         except:
             print_log("Could not open login page.")
-            if !avoid_error:
+            if avoid_error == False:
                 exit()
 
         # check login result
