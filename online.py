@@ -6,10 +6,9 @@ import sys
 from html.parser import HTMLParser
 from urllib.request import urlopen
 
-# this global variable is used to avoid SSL cert verify fail when fiddler is used
-fiddler_ssl = False
-ex_log = False
-retry_count = 0
+##############################
+#####       CONFIG       ##### 
+##############################
 
 # flow upper limit rate
 flow_rate = 0.8
@@ -26,6 +25,21 @@ wlan_url = "10.21.250.3"
 # sometimes DNS goes down, we need ip address
 base_url = "172.30.201.10"
 
+# Free Plan Credit (GiB)
+free_credit = 12
+
+# Enable Export Log Function
+ex_log = False
+ex_logfile = "log.txt"
+
+# Avoid SSL cert verify error for fiddler debugging
+fiddler_ssl = False
+
+##############################
+#####      Variables     ##### 
+##############################
+
+retry_count = 0
 wlan_status = -1
 
 def wlan_detect():
@@ -92,10 +106,10 @@ def if_overused():
         html_par.flg_is_online = True
         html_par.feed(html_res.text)
         try:
-            print_log(str(("%.2f" % (float(html_par.used_data) / 1024))) + " MiB" '\t' + str(int(int(html_par.used_data) / (8 * 1024 * 1024) * 100)) + '%')
+            print_log(str(("%.2f" % (float(html_par.used_data) / 1024))) + " MiB" '\t' + str(int(int(html_par.used_data) / (free_credit * 1024 * 1024) * 100)) + '%')
         except:
             return -1;
-        if int(html_par.used_data) / (8 * 1024 * 1024) < flow_rate:
+        if int(html_par.used_data) / (free_credit * 1024 * 1024) < flow_rate:
             # not overused
             return 0
         else:
@@ -260,7 +274,7 @@ def print_log(content):
     print(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())) + content)
     sys.stdout.flush()
     if ex_log:
-        f_log = open("log.txt", "a")
+        f_log = open(ex_logfile, "a")
         f_log.write(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())) + str(content) + '\n')
         f_log.close()
     return
