@@ -101,6 +101,8 @@ def if_overused():
         print_log("Failed to get login page.")
         if avoid_error == False:
             exit()
+        else:
+            return
     html_par = HtmlPar()
     # print(html_res.text)
     if not is_online(html_res):
@@ -239,6 +241,8 @@ def login():
             print_log("Could not open login page.")
             if avoid_error == False:
                 exit()
+            else:
+                return
 
         # check login result
         if is_success(html_res):
