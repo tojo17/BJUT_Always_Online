@@ -2,13 +2,19 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
 README [English](#English) | [中文](#中文)
+
+## TODO
+
++ [ ] Add IPv6 Support
++ [ ] Internal IP DDNS for Hurricane Electric(HE) DDNS and Dynu DDNS
++ [ ] Break up WLAN authentification into internal network and Internet to improve experience
 
 ## English
 ### Introduction
 
 BJUT_Always_Online is a test project based on Python, it is used to auto-login the campus network (**both for wired network and wireless network**) with a bunch of accounts in Beijing University of Technology.
+
 
 ### Features
 
