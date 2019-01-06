@@ -6,8 +6,10 @@ README [English](#English) | [中文](#中文)
 
 ## TODO
 
-+ [ ] Add IPv6 Support
++ [x] Add IPv6 Support
++ [ ] Auto-disabled failed account
 + [ ] Internal IP DDNS for Hurricane Electric(HE) DDNS and Dynu DDNS
++ [ ] Connect to [Server酱](http://sc.ftqq.com/)
 + [ ] Break up WLAN authentification into internal network and Internet to improve experience
 
 ## English
