@@ -25,6 +25,11 @@ wlan_url = "10.21.250.3"
 # sometimes DNS goes down, we need ip address
 base_url = "172.30.201.10"
 
+# base_url6 = "lgn6.bjut.edu.cn" 
+# sometimes DNS goes down, we need ip address
+# use [] to include IPv6 address
+base_url6 = "[2001:da8:216:30c9::2]"
+
 # Free Plan Credit (GiB)
 free_credit = 12
 
@@ -203,6 +208,39 @@ def logout():
     print_log("Logged out.")
     return 0
 
+def login6():
+    html_url = "http://" + base_url6 + "/"
+    account = get_available_account()
+    if account == 1:
+        print_log("Using backup account.")
+        f_bkac = open("backupac.txt")
+        account = f_bkac.readline().strip('\n').split(',')
+        f_bkac.close()
+        back_account = True
+
+    print_log("Logging in IPv6 " + account[0])
+    html_values = {
+                'DDDDD': account[0],
+                'upass': account[1],
+                'v46s':  2,
+                'v6ip': '',
+                'f4serip': '',
+                '0MKKey': ''
+    }
+    html_res = None
+    try:
+        html_res = requests.post(html_url, data=html_values, verify=not fiddler_ssl)
+        html_res.encoding = "GB2312"
+    except:
+        print_log("Could not open IPv6 login page.")
+        if avoid_error == False:
+            exit()
+        else:
+            return
+     # check login result
+    if is_success(html_res):
+        # login successfully
+        print_log("Logged in IPv6.")
 
 def login():
     back_account = False
@@ -252,6 +290,7 @@ def login():
             if traffic_status == 0 or back_account is True:
                 # login success
                 print_log("Traffic enough.")
+                login6()
                 return back_account
             elif traffic_status == -1:
                 # not logged in
