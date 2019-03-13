@@ -48,7 +48,7 @@ avoid_error = True
 ##############################
 
 retry_count = 0
-wlan_status = -1
+wlan_status = False
 
 def wlan_detect():
     try:
@@ -59,8 +59,11 @@ def wlan_detect():
         else:
             wlan_status = False
             print("Wired connection detected.")
-    except:
-        pass
+    except Exception as e:
+        #print_log(e)
+        #urlopen error means it's in wired environment
+        wlan_status = False
+        print("Wired connection detected.")
 def heart_beat():
     try:
         headers = {
@@ -72,7 +75,7 @@ def heart_beat():
         print_log("Heart beat sent.")
     except:
         t = "offline"
-    return t == "Microsoft NCSI" 
+    return t == "Microsoft NCSI"
 
 
 def if_overused():
@@ -124,7 +127,7 @@ def if_overused():
             # not overused
             return 0
         else:
-            # used over limit   
+            # used over limit
             return 1
 
 
@@ -201,6 +204,7 @@ def logout():
     else:
         html_url = "http://" + base_url + "/F.html"
     try:
+        print_log("Trying url:"+html_url)
         requests.get(html_url, verify=not fiddler_ssl)
     except:
         print_log("No need to logout or logout err.")
@@ -319,7 +323,8 @@ def reset_index():
 
 
 def print_log(content):
-    print(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())) + content)
+    print(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())),end='')
+    print(content)
     sys.stdout.flush()
     if ex_log:
         f_log = open(ex_logfile, "a")
@@ -363,3 +368,4 @@ if __name__ == "__main__":
             heart_beat()
 
         time.sleep(lifecycle)
+
