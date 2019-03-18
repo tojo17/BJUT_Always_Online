@@ -50,7 +50,6 @@ avoid_error = True
 retry_count = 0
 wlan_status = False
 
-
 def wlan_detect():
     global wlan_status
     try:
@@ -66,7 +65,6 @@ def wlan_detect():
         # urlopen error means it's in wired environment
         wlan_status = False
         print("Wired connection detected.")
-
 
 def heart_beat():
     try:
@@ -132,7 +130,7 @@ def if_overused():
             # not overused
             return 0
         else:
-            # used over limit   
+            # used over limit
             return 1
 
 
@@ -375,3 +373,4 @@ if __name__ == "__main__":
             heart_beat()
 
         time.sleep(lifecycle)
+
