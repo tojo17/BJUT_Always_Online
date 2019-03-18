@@ -50,7 +50,9 @@ avoid_error = True
 retry_count = 0
 wlan_status = False
 
+
 def wlan_detect():
+    global wlan_status
     try:
         wlan_resp = urlopen("http://" + wlan_url + "/")
         if wlan_resp.getcode() == 200:
@@ -60,14 +62,16 @@ def wlan_detect():
             wlan_status = False
             print("Wired connection detected.")
     except Exception as e:
-        #print_log(e)
-        #urlopen error means it's in wired environment
+        # print_log(e)
+        # urlopen error means it's in wired environment
         wlan_status = False
         print("Wired connection detected.")
+
+
 def heart_beat():
     try:
         headers = {
-        'Connection': 'close',
+            'Connection': 'close',
         }
         r = requests.get("http://www.msftncsi.com/ncsi.txt", timeout=1, headers=headers)
         requests.adapters.DEFAULT_RETRIES = 5
@@ -120,14 +124,15 @@ def if_overused():
         html_par.flg_is_online = True
         html_par.feed(html_res.text)
         try:
-            print_log(str(("%.2f" % (float(html_par.used_data) / 1024))) + " MiB" '\t' + str(int(int(html_par.used_data) / (free_credit * 1024 * 1024) * 100)) + '%')
+            print_log(str(("%.2f" % (float(html_par.used_data) / 1024))) + " MiB" '\t' + str(
+                int(int(html_par.used_data) / (free_credit * 1024 * 1024) * 100)) + '%')
         except:
-            return -1;
+            return -1
         if int(html_par.used_data) / (free_credit * 1024 * 1024) < flow_rate:
             # not overused
             return 0
         else:
-            # used over limit
+            # used over limit   
             return 1
 
 
@@ -204,13 +209,14 @@ def logout():
     else:
         html_url = "http://" + base_url + "/F.html"
     try:
-        print_log("Trying url:"+html_url)
+        print_log("Trying url:" + html_url)
         requests.get(html_url, verify=not fiddler_ssl)
     except:
         print_log("No need to logout or logout err.")
         return 1
     print_log("Logged out.")
     return 0
+
 
 def login6():
     html_url = "http://" + base_url6 + "/"
@@ -224,12 +230,12 @@ def login6():
 
     print_log("Logging in IPv6 " + account[0])
     html_values = {
-                'DDDDD': account[0],
-                'upass': account[1],
-                'v46s':  2,
-                'v6ip': '',
-                'f4serip': '',
-                '0MKKey': ''
+        'DDDDD': account[0],
+        'upass': account[1],
+        'v46s': 2,
+        'v6ip': '',
+        'f4serip': '',
+        '0MKKey': ''
     }
     html_res = None
     try:
@@ -241,10 +247,11 @@ def login6():
             exit()
         else:
             return
-     # check login result
+    # check login result
     if is_success(html_res):
         # login successfully
         print_log("Logged in IPv6.")
+
 
 def login():
     back_account = False
@@ -266,11 +273,11 @@ def login():
             }
         else:
             html_values = {
-            'DDDDD': account[0],
-            'upass': account[1],
-            'v46s': '1',
-            '0MKKey': ''
-        }
+                'DDDDD': account[0],
+                'upass': account[1],
+                'v46s': '1',
+                '0MKKey': ''
+            }
         if wlan_status:
             html_url = "http://" + wlan_url + "/"
         else:
@@ -307,7 +314,7 @@ def login():
         else:
             # login not success
             global retry_count
-            if retry_count>3:
+            if retry_count > 3:
                 renew_index()
                 retry_count = 0
                 print_log("Login failure too many times, try next.")
@@ -323,7 +330,7 @@ def reset_index():
 
 
 def print_log(content):
-    print(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())),end='')
+    print(time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())), end='')
     print(content)
     sys.stdout.flush()
     if ex_log:
@@ -368,4 +375,3 @@ if __name__ == "__main__":
             heart_beat()
 
         time.sleep(lifecycle)
-
